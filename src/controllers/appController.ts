@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import axios from "axios"
 import { fetchPokemonByName, fetchPokemonByID, createSilhouetteImage }  from '../services/AppService';
+import path from 'path'
 
 type Pokemon = {
     id:number,
@@ -33,13 +34,13 @@ export const getRandomPokemons = async (req: Request, res: Response) => {
                 const originalImageUrl = pokemonDetails.sprites.other['official-artwork'].front_default;
                 const silhouetteImagePath = pokemonDetails.id + "_silhouette.png";
 
-                const path: string | undefined = await createSilhouetteImage(originalImageUrl, silhouetteImagePath)
-
+                // const path: string | undefined = await createSilhouetteImage(originalImageUrl, silhouetteImagePath)
+                await createSilhouetteImage(originalImageUrl, silhouetteImagePath)
                 var pokemonObject : Pokemon = {
                     id: pokemonDetails.id,
                     name: pokemonDetails.name,
                     original_image: pokemonDetails.sprites.other['official-artwork'].front_default,
-                    silhouette_image: path,
+                    silhouette_image: silhouetteImagePath,
                     status: false
                 }
                 randomPokemons.push(pokemonObject);
@@ -75,4 +76,14 @@ export const getPokemonById = async(req:Request, res:Response) => {
         original_image: pokemon.sprites.other['official-artwork'].front_default
     });
 
+}
+
+export const getPokemonSilhouetteImage = async(req:Request, res:Response) => {
+    const imageName = req.params.name;
+    res.sendFile(path.join(__dirname, 'silhouette_images', imageName));
+    // const name = req.params.name;
+    // const silhouetteImage = await fetchPokemonSilhouetteImage(name);
+    // res.json({
+    //     silhouette_image: silhouetteImage
+    // });
 }

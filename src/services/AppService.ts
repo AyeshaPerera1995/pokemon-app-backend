@@ -7,8 +7,6 @@ export async function fetchPokemonByName(name: string) {
     try {
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
         const pokemon = response.data;
-        // const response2 = await axios.get(pokemon.species.url)
-        // const pokemon_species = response2.data
         return pokemon
 
     } catch (error) {
@@ -50,8 +48,20 @@ export async function createSilhouetteImage(originalImage: string, silhouetteIma
             .negate() // Invert the colors
             .toFile(fullSilhouetteImagePath);
 
-        return fullSilhouetteImagePath
+        // return fullSilhouetteImagePath
     } catch (error) {
         console.error('Error creating silhouette image:', error);
     }
 }
+
+// fetch pokemon silhouette image
+// export async function fetchPokemonSilhouetteImage(name: string) {
+//     try {
+//         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+//         const pokemon = response.data;
+//         return pokemon
+
+//     } catch (error) {
+//         throw new Error('Error fetching pokémon silhouette image');
+//     }
+// }

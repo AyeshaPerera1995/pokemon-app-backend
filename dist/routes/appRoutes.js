@@ -35,4 +35,6 @@ router.get('/', appController.getRandomPokemons);
 router.get('/name/:name', appController.getPokemonByName);
 // get pokemon by id
 router.get('/id/:id', appController.getPokemonById);
+// get pokemon image
+router.get('/image/:name', appController.getPokemonSilhouetteImage);
 exports.default = router;
