@@ -3,13 +3,16 @@ import axios from "axios"
 import { fetchPokemonByName, fetchPokemonByID, createSilhouetteImage }  from '../services/AppService';
 import path from 'path'
 
-type Pokemon = {
+export type Pokemon = {
     id:number,
     name: string,
     original_image: string,
     silhouette_image: string | undefined,
-    status: boolean 
+    status: boolean,
+    message: string
 }
+
+export declare var correctPockemon: Pokemon
 
 export const getRandomPokemons = async (req: Request, res: Response) => {
     try {
@@ -41,7 +44,8 @@ export const getRandomPokemons = async (req: Request, res: Response) => {
                     name: pokemonDetails.name,
                     original_image: pokemonDetails.sprites.other['official-artwork'].front_default,
                     silhouette_image: silhouetteImagePath,
-                    status: false
+                    status: false,
+                    message: ""
                 }
                 randomPokemons.push(pokemonObject);
             }
@@ -50,7 +54,8 @@ export const getRandomPokemons = async (req: Request, res: Response) => {
         // Set one random Pokémon's status to true
         const randomIndexToSetTrue = Math.floor(Math.random() * randomPokemons.length);
         randomPokemons[randomIndexToSetTrue].status = true;
-        
+        correctPockemon = randomPokemons[randomIndexToSetTrue]
+                
         res.json(randomPokemons)
     } catch (error) {
         res.status(500).json({ message: 'Error fetching Pokémon data', error: error });
@@ -70,20 +75,11 @@ export const getPokemonByName = async(req:Request, res:Response) => {
 export const getPokemonById = async(req:Request, res:Response) => {
         const id = req.params.id;
         const pokemon = await fetchPokemonByID(id);
-        res.json({
-        id: pokemon.id,
-        name : pokemon.name,
-        original_image: pokemon.sprites.other['official-artwork'].front_default
-    });
+        res.json(pokemon);
 
 }
 
 export const getPokemonSilhouetteImage = async(req:Request, res:Response) => {
     const imageName = req.params.name;
     res.sendFile(path.join(__dirname, 'silhouette_images', imageName));
-    // const name = req.params.name;
-    // const silhouetteImage = await fetchPokemonSilhouetteImage(name);
-    // res.json({
-    //     silhouette_image: silhouetteImage
-    // });
 }

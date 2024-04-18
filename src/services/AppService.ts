@@ -1,7 +1,8 @@
 import axios from "axios"
 import sharp from "sharp";
-import fs from "fs"
+import fs, { stat } from "fs"
 import path from "path"
+import { correctPockemon, Pokemon } from "../controllers/appController";
 
 export async function fetchPokemonByName(name: string) {
     try {
@@ -18,7 +19,25 @@ export async function fetchPokemonByID(id: string) {
     try {
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
         const pokemon = response.data;
-        return pokemon
+        var message : string
+        var status : boolean
+        if (pokemon.id == correctPockemon.id) {
+            message = "Congratulations... Your Answer is Correct !!"
+            status = true
+        }else{
+            message = "Oops... Wrong Answer.Please Try Again !!"
+            status = false
+        }
+
+        var pokemonObject : Pokemon = {
+            id: correctPockemon.id,
+            name: correctPockemon.name,
+            original_image: correctPockemon.original_image,
+            silhouette_image: correctPockemon.silhouette_image,
+            status: status,
+            message: message
+        }
+        return pokemonObject
 
     } catch (error) {
         throw new Error('Error fetching pokémon data by ID');
@@ -53,15 +72,3 @@ export async function createSilhouetteImage(originalImage: string, silhouetteIma
         console.error('Error creating silhouette image:', error);
     }
 }
-
-// fetch pokemon silhouette image
-// export async function fetchPokemonSilhouetteImage(name: string) {
-//     try {
-//         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
-//         const pokemon = response.data;
-//         return pokemon
-
-//     } catch (error) {
-//         throw new Error('Error fetching pokémon silhouette image');
-//     }
-// }

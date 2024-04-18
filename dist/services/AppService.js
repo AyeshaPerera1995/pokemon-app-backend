@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchPokemonSilhouetteImage = exports.createSilhouetteImage = exports.fetchPokemonByID = exports.fetchPokemonByName = void 0;
+exports.createSilhouetteImage = exports.fetchPokemonByID = exports.fetchPokemonByName = void 0;
 const axios_1 = __importDefault(require("axios"));
 const sharp_1 = __importDefault(require("sharp"));
 const fs_1 = __importDefault(require("fs"));
@@ -71,16 +71,12 @@ function createSilhouetteImage(originalImage, silhouetteImage) {
 }
 exports.createSilhouetteImage = createSilhouetteImage;
 // fetch pokemon silhouette image
-function fetchPokemonSilhouetteImage(name) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield axios_1.default.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-            const pokemon = response.data;
-            return pokemon;
-        }
-        catch (error) {
-            throw new Error('Error fetching pokémon silhouette image');
-        }
-    });
-}
-exports.fetchPokemonSilhouetteImage = fetchPokemonSilhouetteImage;
+// export async function fetchPokemonSilhouetteImage(name: string) {
+//     try {
+//         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+//         const pokemon = response.data;
+//         return pokemon
+//     } catch (error) {
+//         throw new Error('Error fetching pokémon silhouette image');
+//     }
+// }
