@@ -40,7 +40,8 @@ const getRandomPokemons = (req, res) => __awaiter(void 0, void 0, void 0, functi
                     name: pokemonDetails.name,
                     original_image: pokemonDetails.sprites.other['official-artwork'].front_default,
                     silhouette_image: silhouetteImagePath,
-                    status: false
+                    status: false,
+                    message: ""
                 };
                 randomPokemons.push(pokemonObject);
             }
@@ -48,6 +49,7 @@ const getRandomPokemons = (req, res) => __awaiter(void 0, void 0, void 0, functi
         // Set one random Pokémon's status to true
         const randomIndexToSetTrue = Math.floor(Math.random() * randomPokemons.length);
         randomPokemons[randomIndexToSetTrue].status = true;
+        exports.correctPockemon = randomPokemons[randomIndexToSetTrue];
         res.json(randomPokemons);
     }
     catch (error) {
@@ -68,20 +70,11 @@ exports.getPokemonByName = getPokemonByName;
 const getPokemonById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const pokemon = yield (0, AppService_1.fetchPokemonByID)(id);
-    res.json({
-        id: pokemon.id,
-        name: pokemon.name,
-        original_image: pokemon.sprites.other['official-artwork'].front_default
-    });
+    res.json(pokemon);
 });
 exports.getPokemonById = getPokemonById;
 const getPokemonSilhouetteImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const imageName = req.params.name;
     res.sendFile(path_1.default.join(__dirname, 'silhouette_images', imageName));
-    // const name = req.params.name;
-    // const silhouetteImage = await fetchPokemonSilhouetteImage(name);
-    // res.json({
-    //     silhouette_image: silhouetteImage
-    // });
 });
 exports.getPokemonSilhouetteImage = getPokemonSilhouetteImage;

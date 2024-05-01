@@ -17,6 +17,7 @@ const axios_1 = __importDefault(require("axios"));
 const sharp_1 = __importDefault(require("sharp"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const appController_1 = require("../controllers/appController");
 function fetchPokemonByName(name) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -35,7 +36,25 @@ function fetchPokemonByID(id) {
         try {
             const response = yield axios_1.default.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
             const pokemon = response.data;
-            return pokemon;
+            var message;
+            var status;
+            if (pokemon.id == appController_1.correctPockemon.id) {
+                message = "Congratulations... Your Answer is Correct !!";
+                status = true;
+            }
+            else {
+                message = "Oops... Wrong Answer.Please Try Again !!";
+                status = false;
+            }
+            var pokemonObject = {
+                id: appController_1.correctPockemon.id,
+                name: appController_1.correctPockemon.name,
+                original_image: appController_1.correctPockemon.original_image,
+                silhouette_image: appController_1.correctPockemon.silhouette_image,
+                status: status,
+                message: message
+            };
+            return pokemonObject;
         }
         catch (error) {
             throw new Error('Error fetching pokémon data by ID');
@@ -70,13 +89,3 @@ function createSilhouetteImage(originalImage, silhouetteImage) {
     });
 }
 exports.createSilhouetteImage = createSilhouetteImage;
-// fetch pokemon silhouette image
-// export async function fetchPokemonSilhouetteImage(name: string) {
-//     try {
-//         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
-//         const pokemon = response.data;
-//         return pokemon
-//     } catch (error) {
-//         throw new Error('Error fetching pokémon silhouette image');
-//     }
-// }
